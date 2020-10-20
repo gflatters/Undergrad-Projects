@@ -1,4 +1,4 @@
-# Undergrad-Projects
+# Undergraduate Python Assignments
 
 This repository contains three Python assignments I completed while in the third year of my physics degree.
 

@@ -1,3 +1,9 @@
+import numpy as np
+import scipy
+import math
+import matplotlib.pyplot as plt
+import pylab
+'-----------------------------------------------------------------------------'
 '''functions for the 2d physics problem'''
 
 def get_position2d(x,y):

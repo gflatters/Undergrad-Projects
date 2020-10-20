@@ -267,3 +267,105 @@ print ('Solution via LU decomposition: \n', get_lu(m, g), '\n')
 #SVD solution
 print('Correct solution via SVD?', test_svd(m, g), '\n')
 print ('Solution via SVD: \n', get_svd(m, g), '\n')
+
+'-----------------------------------------------------------------------------'
+'''speed tests, some hashed out to save time'''
+print('Please allow some time for the speed graphs to plot...')
+#different lists:
+
+inv_list = []
+svd_list = []
+lu_list = []
+
+#lists for n data
+inv_n = []
+lu_n = []
+svd_n = []
+
+#lists for time data
+inv_total = []
+svd_total = []
+lu_total = []
+
+#lists for fit data
+lu_fitdata = []
+inv_fitdata = []
+svd_fitdata = []
+
+inv_n, inv_total, inv_fitdata = inv_time(inv_n, inv_total, inv_fitdata)
+lu_n, lu_total, lu_fitdata = lu_time(lu_n, lu_total, lu_fitdata)
+svd_n, svd_total, svd_fitdata = svd_time(svd_n, svd_total, svd_fitdata)
+
+'-----------------------------------------------------------------------------'
+'''statistical test for analytic method'''
+fig = plt.figure(figsize = (18,10))
+ax = fig.add_subplot(111)
+ax.plot(inv_n, inv_total, c='magenta', label='Analytic method time')
+ax.plot(inv_n, inv_fitdata, 'g--', label='Theoretical fit')
+ax.set_xlabel("n")
+ax.set_ylabel("Time (Seconds)")
+ax.set_xlim(n_min, inv_max-1)
+ax.set_ylim(0)
+ax.set_title('Speed of Analytic Method')
+ax.grid()
+pylab.legend(prop={'size':15})
+plt.show()
+
+print('Results of the analytic method chi-square test:')
+print(chisquare([inv_total], f_exp=[inv_fitdata], ddof=5, axis=None))
+
+'''statistical test for lud'''
+
+fig = plt.figure(figsize = (18,10))
+ax = fig.add_subplot(111)
+ax.plot(lu_n, lu_total, c='magenta', label='LU decomposition time')
+ax.plot(lu_n, lu_fitdata, 'r--', label='FLOP model fit')
+ax.set_xlabel("n")
+ax.set_ylabel("Time (Seconds)")
+ax.set_xlim(n_min, lu_max-1)
+ax.set_ylim(0)
+ax.set_title('Speed of LUD')
+ax.grid()
+pylab.legend(prop={'size':15})
+plt.show()
+
+print('Results of the LU chi-square test:')
+print(chisquare([lu_total], f_exp=[lu_fitdata], ddof=148, axis=None))
+
+'''statistical test for svd'''
+fig = plt.figure(figsize = (18,10))
+ax = fig.add_subplot(111)
+ax.plot(svd_n, svd_total, c='magenta', label='Singular value decomposition time')
+ax.plot(svd_n, svd_fitdata, 'g--', label='theoretical fit')
+ax.set_xlabel("n")
+ax.set_ylabel("Time (Seconds)")
+ax.set_xlim(n_min, svd_max-1)
+ax.set_ylim(0)
+ax.set_title('Speed of SVD')
+ax.grid()
+pylab.legend(prop={'size':15})
+plt.show()
+
+print('Results of the SVD chi-square test:')
+print(chisquare([svd_total], f_exp=[svd_fitdata], ddof=98, axis=None))
+'-----------------------------------------------------------------------------'
+'''behaviour when equations approach singular'''
+k_list = []
+k_error = []
+scipy_error = []
+
+k_list, k_error, scipy_error = k_accuracy(k_list, k_error, scipy_error)
+
+fig = plt.figure(figsize = (18,10))
+ax = fig.add_subplot(111)
+ax.plot(k_list, k_error, c='blue', label='my inversion error')
+ax.plot(k_list, scipy_error, c='green', label='scipy inversion error')
+ax.set_xlabel("k")
+ax.set_ylabel("absolute k error")
+ax.set_xlim(1e-15, 1e-13)
+ax.set_title('The error in the inversion as a function of k')
+ax.grid()
+pylab.legend(prop={'size':15})
+plt.show()
+
+'-----------------------------------------------------------------------------'

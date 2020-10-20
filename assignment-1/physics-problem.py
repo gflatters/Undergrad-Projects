@@ -1,4 +1,3 @@
-'-----------------------------------------------------------------------------'
 '''functions for the 2d physics problem'''
 
 def get_position2d(x,y):
